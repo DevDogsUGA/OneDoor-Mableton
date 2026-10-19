@@ -28,6 +28,8 @@ You need [Node.js](https://nodejs.org) for clasp.
 5. Get a Gemini API key at https://aistudio.google.com/apikey and choose the Google Cloud project `g311-onedoor-mableton`. In the editor, add it under Project Settings → Script Properties as `GEMINI_API_KEY`.
 6. `clasp push`, then run `testGemini` in the editor.
 
+If Gemini replies "This model is currently experiencing high demand", change `GEMINI_MODEL` in `src/Code.gs` to an older Flash model such as `gemini-3.5-flash`. The newest model is the busiest on the free tier.
+
 ## Working on it
 
 - `clasp push` uploads `src/` to the script; `clasp pull` downloads edits made in the browser editor. Pick one place to edit, or pull before you push.
