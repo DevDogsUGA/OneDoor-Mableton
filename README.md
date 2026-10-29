@@ -3,7 +3,9 @@
 **Report it once. See it fixed. See where the money goes.**
 
 Georgia 311 Challenge 2026 · DevDogs (GDG on Campus UGA) · Track 3: Tiny Desk, Civic Style
-Team: Bhaumi Nadella, Sophie · Advisor: Jack Harrington
+Team: Bhaumi Nadella, Sophie Keller · Advisor: Jack Harrington
+
+**Live prototype:** PASTE_EXEC_URL_HERE · **Demo video:** PASTE_VIDEO_LINK_HERE
 
 OneDoor is one front door for Mableton residents to report neighborhood problems (illegal dumping, tall grass, junk cars, missed trash pickup) in English or Spanish. Gemini sorts each report, tells the resident whether the City or Cobb County handles it, and groups duplicate reports into one issue so a small staff sees a ranked list instead of a full inbox. Residents get a tracking number and can follow their request from Received to Fixed. A public page shows open issues by district and how department budgets compare with the cost of work.
 
@@ -15,6 +17,7 @@ OneDoor is one front door for Mableton residents to report neighborhood problems
 - Complaints arrive by phone, email and web form. Council members say residents often get only an automated reply, then email them directly for updates.
 - Cobb DOT collects about 800 pounds of dumped trash a day in the area. In 2026 the council raised dumping fines to $500 and $1,000.
 - About 1 in 4 residents is Hispanic and 17% were born abroad, so a report form that works only in English leaves people out.
+- Existing tools don't close the gap: Cobb County's SeeClickFix covers county roads and parks, not city code enforcement or sanitation, and Google Jigsaw's Sensemaker summarizes feedback but doesn't take in or route reports.
 
 Sources are listed at the bottom.
 
@@ -29,7 +32,7 @@ Sources are listed at the bottom.
 | Residents | **Track my request**: a timeline of received, assigned, in progress and fixed, plus staff notes. |
 | Staff | Passcode-protected **Staff** page, or the Google Sheet: change status, add a public note (auto-translated) and costs. |
 | Staff | **Approve before send**: Gemini drafts every resident email in their language, and nothing is sent until a person approves it. |
-| Staff | Weekly district digest: Gemini summarizes each district's top themes in English and Spanish (`buildWeeklyDigest`, scheduled Mondays 7am). |
+| Staff | Weekly district digest, inspired by Google Jigsaw's open-source Sensemaking approach: Gemini summarizes each district's top themes in English and Spanish (`buildWeeklyDigest`, scheduled Mondays 7am). |
 
 ## How it works
 
