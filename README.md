@@ -29,7 +29,7 @@ Sources are listed at the bottom.
 | Residents | **Track my request**: a timeline of received, assigned, in progress and fixed, plus staff notes. |
 | Staff | Passcode-protected **Staff** page, or the Google Sheet: change status, add a public note (auto-translated) and costs. |
 | Staff | **Approve before send**: Gemini drafts every resident email in their language, and nothing is sent until a person approves it. |
-| Staff | Weekly district digest: Gemini summarizes each district's top themes in English and Spanish (`buildWeeklyDigest`, scheduled Mondays 7am). The Sheet also feeds a Looker Studio dashboard. |
+| Staff | Weekly district digest: Gemini summarizes each district's top themes in English and Spanish (`buildWeeklyDigest`, scheduled Mondays 7am). |
 
 ## How it works
 
@@ -40,7 +40,7 @@ Resident (web page or Google Form)
 Apps Script ──► Gemini API: category, language, emergency flag, duplicate check, reply draft
         │  └──► US Census geocoder: address → map point, inside city limits?
         ▼
-Google Sheet (Requests, Issues, Replies, Budget, Digest) ──► Looker Studio staff dashboard
+Google Sheet (Requests, Issues, Replies, Budget, Digest) ──► Staff page and public Issues page
         ▲
 City staff (Staff page or Sheet): status, notes, costs, approve replies → email to resident
 ```
@@ -119,7 +119,7 @@ OneDoor is built so a city clerk, not a developer, can run it. It uses tools the
 - Share of reports filed in Spanish, and "any update?" emails received by council offices.
 
 **Phase 3: citywide (months 2 to 3)**
-- Link OneDoor from mableton.gov, open it to all six districts, and share the Looker Studio dashboard with council members.
+- Link OneDoor from mableton.gov, open it to all six districts, and give council members access to the Staff page.
 - Add the official council district map so districts are set from the address automatically (`DISTRICTS_GEOJSON_FILE_ID`).
 
 **Before handling real resident data**
@@ -127,7 +127,7 @@ OneDoor is built so a city clerk, not a developer, can run it. It uses tools the
 - Run it under a Google Workspace account (higher email limits: 1,500 per day versus 100 on a personal account) and set a retention rule for the Requests tab.
 - Confirm the Cobb County referral links with the county.
 
-**Cost.** $0 for the pilot: Apps Script, Sheets, Forms, Looker Studio, the Census geocoder and the Gemini free tier. The FY2027 budget sets aside $250,000 for community development, building and code enforcement software. OneDoor can run now at no cost and give the city real data on demand before it buys a larger system. Because the data is a plain Google Sheet, it can be exported to whatever comes next.
+**Cost.** $0 for the pilot: Apps Script, Sheets, Forms, the Census geocoder and the Gemini free tier. The FY2027 budget sets aside $250,000 for community development, building and code enforcement software. OneDoor can run now at no cost and give the city real data on demand before it buys a larger system. Because the data is a plain Google Sheet, it can be exported to whatever comes next.
 
 **Later.** SMS intake, a direct handoff to Cobb County's SeeClickFix, and more languages.
 

@@ -1,6 +1,5 @@
 /**
- * Staff side. Staff work straight in the Google Sheet (and Looker Studio
- * reads the same sheet):
+ * Staff side. Staff work straight in the Google Sheet or on the Staff page:
  *   - Issues tab: change Status. Timestamps fill in on their own, and when an
  *     issue is marked Fixed, a "fixed" reply is drafted for every resident who
  *     left an email.
