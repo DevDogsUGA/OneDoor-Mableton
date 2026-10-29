@@ -37,7 +37,7 @@ Sources are listed at the bottom.
 ## How it works
 
 ```
-Resident (web page or Google Form)
+Resident (web page)
         │
         ▼
 Apps Script ──► Gemini API: category, language, emergency flag, duplicate check, reply draft
