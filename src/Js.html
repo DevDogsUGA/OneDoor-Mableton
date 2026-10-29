@@ -1,0 +1,861 @@
+<script>
+  const T = {
+    en: {
+      skip: 'Skip to content', navResidents: 'For residents', navCity: 'For city staff',
+      seenH: 'Seen it before?', seenP: 'Many problems are already reported. Adding yours moves it up the list.',
+      haveNumH: 'Already sent a report?', haveNumP: 'Use your tracking number to see where it stands.',
+      budgetH: 'FY2027 department budgets', trackHint: 'Enter the tracking number you got when you sent your report.',
+      tagline: 'Report it once. See it fixed. See where the money goes.', menu: 'Menu',
+      tabReport: 'Report a problem', tabIssues: 'Issues in Mableton', tabSpending: 'Where the money goes', tabTrack: 'Track my request', tabStaff: 'Staff',
+      reportH: 'Report a problem', emergency: 'Emergency? Call 911. This form is not monitored around the clock.',
+      checkFirst: 'Check if it has already been reported',
+      descLabel: "What's the problem?", descHint: 'Write in English or Spanish. Say what it is and how long it has been there.',
+      speak: 'Speak', listening: 'Stop', stopRec: 'Stop and add', recording: 'Recording… Speak in English or Spanish, then press "Stop and add".', micBlocked: 'The microphone is blocked. Allow it in the address bar, or record a voice note instead.', popupHint: 'A small recording window opened. Press Start recording there, then Stop and add.', voiceWorking: 'Listening to your recording…', voiceAdded: 'We added what you said to the box above. Check it and fix anything we got wrong.', voiceTooBig: 'That recording is too long. Keep it under about 2 minutes.', dictHint: 'You can also tap the microphone on your keyboard and speak. On a computer, press the Fn key twice (Mac) or Windows + H.',
+      addrLabel: 'Address or nearest intersection', distLabel: 'Council district (optional)', notSure: 'Not sure',
+      photoLabel: 'Photo (optional)', emailLabel: 'Email for updates (optional)',
+      emailHint: 'Only city staff see it. It never appears on the public page.',
+      submit: 'Send report', sending: 'Sending…', needDesc: 'Please describe the problem and give an address.',
+      reqNote: 'Fields marked * are required.', addrHint: 'For example: 5240 Floyd Rd SW, or Floyd Rd and Veterans Memorial Hwy.',
+      errTitle: 'Please fix the following:', needDescField: 'Describe the problem.', needAddrField: 'Enter an address or the nearest intersection.',
+      working: 'Sending your report. Sorting it usually takes a few seconds.', slow: 'Still working. When the service is busy this can take up to a minute. Please keep this page open.',
+      mapCaption: 'Map of the issues listed below. Bigger circles mean more reports. The list has the same information. Map data © OpenStreetMap contributors.',
+      shown: n => n + (n === 1 ? ' issue shown.' : ' issues shown.'),
+      thanks: 'Thank you! Your report was received.', yourNumber: 'Your tracking number',
+      saveIt: 'Save this number to follow your request.', sortedAs: 'We sorted it as', handledBy: 'Handled by',
+      others: n => n + ' residents have reported this problem, so it moves up the list.',
+      county: 'This is handled by Cobb County, not the City of Mableton. Please also report it to Cobb County:',
+      emergencyNow: 'This sounds urgent. If anyone is in danger, call 911 now.',
+      district: 'District', issuesH: 'Issues in Mableton',
+      issuesHint: 'Reports about the same problem are grouped. The most-reported issues are at the top. No names or house numbers are shown.',
+      searchLabel: 'Search issues', searchPh: 'Search by street, problem, or department',
+      fDistrict: 'District', fStatus: 'Status', all: 'All', reports: 'reports', report1: 'report',
+      openIssues: 'Open issues', totalReports: 'Resident reports', fixed: 'Fixed', referred: 'Sent to Cobb County',
+      reported: 'First reported', sampleLabel: 'Sample data for the demo',
+      noIssues: 'No issues match.', notYet: 'Not reported yet?', reportThis: 'Report this problem',
+      spendH: 'Where the money goes',
+      spendHint: 'Department budgets come from the City of Mableton FY2027 budget. Costs per issue are entered by staff when work is done.',
+      byDept: 'Work on reported issues, by department', dept: 'Department', issuesCol: 'Issues', fixedCol: 'Fixed',
+      est: 'Estimated cost', spent: 'Spent so far', source: 'Source', costNote: 'Per-issue costs in this demo are sample figures.',
+      trackH: 'Track my request', trackLabel: 'Tracking number', lookup: 'Look up', notFound: 'We could not find that tracking number. Check it and try again.',
+      stReceived: 'Received', stAssigned: 'Assigned to staff', stProgress: 'Work in progress', stFixed: 'Fixed',
+      note: 'Update from staff', loading: 'Loading…',
+      staffH: 'Staff', staffHint: 'For City of Mableton staff. Sign in to update reported issues.',
+      passLabel: 'Passcode', signIn: 'Sign in', signOut: 'Sign out', badPass: 'That passcode did not work.',
+      sessionEnded: 'Your session ended. Sign in again.',
+      sOpen: 'Open', sFixed: 'Fixed', startWork: 'Start work', markFixed: 'Mark fixed', edit: 'Edit',
+      statusLabel: 'Status', noteLabel: 'Note shown to residents', estLabel: 'Estimated cost ($)', spentLabel: 'Spent so far ($)',
+      save: 'Save changes', saved: 'Saved.', saving: 'Saving…',
+      vIssues: 'Issues', vReplies: 'Replies', repHint: 'Drafts written for residents. Edit if needed, then approve to send. Nothing is sent until you do.',
+      noReplies: 'No replies waiting for approval.', toLabel: 'To', subjectLabel: 'Subject', messageLabel: 'Message',
+      approveSend: 'Approve and send', sentOk: 'Sent.',
+      tabHelp: 'Resources & FAQ', linksH: 'City and county resources', faqH: 'Frequently asked questions',
+      play: 'Play', pause: 'Pause', redo: 'Redo', del: 'Delete', voiceHint: 'The recording is not sent with your report. Only the text is.',
+      micDenied: 'Microphone access was blocked. Allow it in your browser settings to use voice.', noSpeech: "We didn't hear anything. Try again.",
+      noPlayback: "Your words were added, but playback isn't available on this device.",
+      reasons: { 'received': 'Report received', 'county referral': 'County referral', 'fixed': 'Issue fixed' },
+      status: { 'Received': 'Received', 'Assigned': 'Assigned', 'In progress': 'In progress', 'Fixed': 'Fixed', 'Referred to Cobb County': 'Sent to Cobb County' },
+      footer: 'Prototype for the Georgia 311 Challenge by DevDogs (GDG on Campus UGA). Not an official City of Mableton service.',
+      langBtn: 'Español', langAria: 'Ver en español', mapLabel: 'Map of reported issues', error: 'Something went wrong. Please try again.',
+    },
+    es: {
+      skip: 'Saltar al contenido', navResidents: 'Para residentes', navCity: 'Para el personal de la ciudad',
+      seenH: '¿Ya lo vio antes?', seenP: 'Muchos problemas ya están reportados. Si agrega el suyo, sube en la lista.',
+      haveNumH: '¿Ya envió un reporte?', haveNumP: 'Use su número de seguimiento para ver cómo va.',
+      budgetH: 'Presupuestos por departamento FY2027', trackHint: 'Escriba el número de seguimiento que recibió al enviar su reporte.',
+      tagline: 'Repórtelo una vez. Véalo resuelto. Vea a dónde va el dinero.', menu: 'Menú',
+      tabReport: 'Reportar un problema', tabIssues: 'Problemas en Mableton', tabSpending: 'A dónde va el dinero', tabTrack: 'Seguir mi reporte', tabStaff: 'Personal',
+      reportH: 'Reportar un problema', emergency: '¿Emergencia? Llame al 911. Este formulario no se revisa a toda hora.',
+      checkFirst: 'Revise si ya fue reportado',
+      descLabel: '¿Cuál es el problema?', descHint: 'Escriba en español o inglés. Diga qué es y desde cuándo está ahí.',
+      speak: 'Hablar', listening: 'Parar', stopRec: 'Parar y agregar', recording: 'Grabando… Hable en español o inglés y luego presione "Parar y agregar".', micBlocked: 'El micrófono está bloqueado. Permítalo en la barra de direcciones o grabe una nota de voz.', popupHint: 'Se abrió una ventana de grabación. Presione Empezar a grabar y luego Parar y agregar.', voiceWorking: 'Escuchando su grabación…', voiceAdded: 'Agregamos lo que dijo en el cuadro de arriba. Revíselo y corrija lo que haga falta.', voiceTooBig: 'La grabación es muy larga. Que dure menos de unos 2 minutos.', dictHint: 'También puede tocar el micrófono de su teclado y hablar. En una computadora, presione Fn dos veces (Mac) o Windows + H.',
+      addrLabel: 'Dirección o intersección más cercana', distLabel: 'Distrito del concejo (opcional)', notSure: 'No sé',
+      photoLabel: 'Foto (opcional)', emailLabel: 'Correo para recibir noticias (opcional)',
+      emailHint: 'Solo lo ve el personal de la ciudad. Nunca aparece en la página pública.',
+      submit: 'Enviar reporte', sending: 'Enviando…', needDesc: 'Describa el problema y escriba una dirección.',
+      reqNote: 'Los campos marcados con * son obligatorios.', addrHint: 'Por ejemplo: 5240 Floyd Rd SW, o Floyd Rd y Veterans Memorial Hwy.',
+      errTitle: 'Corrija lo siguiente:', needDescField: 'Describa el problema.', needAddrField: 'Escriba una dirección o la intersección más cercana.',
+      working: 'Enviando su reporte. Clasificarlo suele tardar unos segundos.', slow: 'Seguimos trabajando. Cuando el servicio está ocupado puede tardar hasta un minuto. No cierre esta página.',
+      mapCaption: 'Mapa de los problemas de la lista. Los círculos más grandes tienen más reportes. La lista tiene la misma información. Datos del mapa © colaboradores de OpenStreetMap.',
+      shown: n => n + (n === 1 ? ' problema en la lista.' : ' problemas en la lista.'),
+      thanks: '¡Gracias! Recibimos su reporte.', yourNumber: 'Su número de seguimiento',
+      saveIt: 'Guarde este número para seguir su reporte.', sortedAs: 'Lo clasificamos como', handledBy: 'Lo atiende',
+      others: n => n + ' residentes han reportado este problema, así que sube en la lista.',
+      county: 'Esto lo atiende el Condado de Cobb, no la Ciudad de Mableton. Repórtelo también al Condado de Cobb:',
+      emergencyNow: 'Esto parece urgente. Si alguien está en peligro, llame al 911 ahora.',
+      district: 'Distrito', issuesH: 'Problemas en Mableton',
+      issuesHint: 'Los reportes sobre el mismo problema se agrupan. Los más reportados aparecen primero. No se muestran nombres ni números de casa.',
+      searchLabel: 'Buscar problemas', searchPh: 'Busque por calle, problema o departamento',
+      fDistrict: 'Distrito', fStatus: 'Estado', all: 'Todos', reports: 'reportes', report1: 'reporte',
+      openIssues: 'Problemas abiertos', totalReports: 'Reportes de residentes', fixed: 'Resueltos', referred: 'Enviados al Condado de Cobb',
+      reported: 'Primer reporte', sampleLabel: 'Datos de ejemplo para la demostración',
+      noIssues: 'Ningún problema coincide.', notYet: '¿Aún no está reportado?', reportThis: 'Reportar este problema',
+      spendH: 'A dónde va el dinero',
+      spendHint: 'Los presupuestos vienen del presupuesto FY2027 de la Ciudad de Mableton. El personal anota el costo de cada problema al terminar el trabajo.',
+      byDept: 'Trabajo en problemas reportados, por departamento', dept: 'Departamento', issuesCol: 'Problemas', fixedCol: 'Resueltos',
+      est: 'Costo estimado', spent: 'Gastado hasta ahora', source: 'Fuente', costNote: 'Los costos por problema en esta demostración son de ejemplo.',
+      trackH: 'Seguir mi reporte', trackLabel: 'Número de seguimiento', lookup: 'Buscar', notFound: 'No encontramos ese número. Revíselo e intente de nuevo.',
+      stReceived: 'Recibido', stAssigned: 'Asignado al personal', stProgress: 'Trabajo en curso', stFixed: 'Resuelto',
+      note: 'Nota del personal', loading: 'Cargando…',
+      staffH: 'Personal', staffHint: 'Para el personal de la Ciudad de Mableton. Inicie sesión para actualizar los problemas reportados.',
+      passLabel: 'Código de acceso', signIn: 'Iniciar sesión', signOut: 'Cerrar sesión', badPass: 'Ese código no funcionó.',
+      sessionEnded: 'Su sesión terminó. Inicie sesión de nuevo.',
+      sOpen: 'Abiertos', sFixed: 'Resueltos', startWork: 'Iniciar trabajo', markFixed: 'Marcar resuelto', edit: 'Editar',
+      statusLabel: 'Estado', noteLabel: 'Nota visible para residentes', estLabel: 'Costo estimado ($)', spentLabel: 'Gastado hasta ahora ($)',
+      save: 'Guardar cambios', saved: 'Guardado.', saving: 'Guardando…',
+      vIssues: 'Problemas', vReplies: 'Respuestas', repHint: 'Borradores escritos para los residentes. Edítelos si hace falta y apruébelos para enviar. No se envía nada hasta que lo haga.',
+      noReplies: 'No hay respuestas esperando aprobación.', toLabel: 'Para', subjectLabel: 'Asunto', messageLabel: 'Mensaje',
+      approveSend: 'Aprobar y enviar', sentOk: 'Enviado.',
+      tabHelp: 'Recursos y preguntas frecuentes', linksH: 'Recursos de la ciudad y del condado', faqH: 'Preguntas frecuentes',
+      play: 'Reproducir', pause: 'Pausar', redo: 'Repetir', del: 'Eliminar', voiceHint: 'La grabación no se envía con su reporte. Solo se envía el texto.',
+      micDenied: 'Se bloqueó el acceso al micrófono. Permítalo en la configuración del navegador.', noSpeech: 'No escuchamos nada. Intente de nuevo.',
+      noPlayback: 'Se agregaron sus palabras, pero la reproducción no está disponible en este dispositivo.',
+      reasons: { 'received': 'Reporte recibido', 'county referral': 'Envío al Condado', 'fixed': 'Problema resuelto' },
+      status: { 'Received': 'Recibido', 'Assigned': 'Asignado', 'In progress': 'En curso', 'Fixed': 'Resuelto', 'Referred to Cobb County': 'Enviado al Condado de Cobb' },
+      footer: 'Prototipo para el Georgia 311 Challenge de DevDogs (GDG on Campus UGA). No es un servicio oficial de la Ciudad de Mableton.',
+      langBtn: 'English', langAria: 'View in English', mapLabel: 'Mapa de problemas reportados', error: 'Algo salió mal. Intente de nuevo.',
+    },
+  };
+  const STATUS_CLASS = { 'Received': 's-received', 'Assigned': 's-assigned', 'In progress': 's-progress', 'Fixed': 's-fixed', 'Referred to Cobb County': 's-county' };
+  const OPEN = ['Received', 'Assigned', 'In progress'];
+
+  let lang = (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+  try { lang = localStorage.getItem('od-lang') || lang; } catch (e) {}
+  let data = null, map = null, layer = null, lastReport = null, lastTrack = null;
+  let staffToken = null, staffIssues = [], staffReplies = [];
+  try { staffToken = sessionStorage.getItem('od-staff'); } catch (e) {}
+
+  const $ = id => document.getElementById(id);
+  const t = k => T[lang][k];
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = n => new Intl.NumberFormat(lang === 'es' ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n || 0);
+  const day = iso => iso ? new Date(iso).toLocaleDateString(lang === 'es' ? 'es-US' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+  const statusBadge = s => '<span class="badge ' + (STATUS_CLASS[s] || '') + '">' + esc(t('status')[s] || s) + '</span>';
+  const title = i => lang === 'es' ? i.titleEs : i.titleEn;
+  const matches = (i, q) => {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return true;
+    const hay = [i.titleEn, i.titleEs, i.categoryEn, i.categoryEs, i.block, i.address, i.department, i.district].join(' ').toLowerCase();
+    return words.every(w => hay.indexOf(w) >= 0);
+  };
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = t(el.dataset.ph); });
+    $('langBtn').textContent = t('langBtn');
+    $('langBtn').setAttribute('aria-label', t('langAria'));
+    $('langBtn').setAttribute('lang', lang === 'es' ? 'en' : 'es');
+    $('map').setAttribute('aria-label', t('mapLabel'));
+    renderHelp(); voiceRender();
+    if (data) { fillStatusFilter(); renderIssues(); renderSpending(); }
+    if (staffToken) { renderStaff(); renderReplies(); }
+    if (lastReport) showReport(lastReport);
+    if (lastTrack) showTrack(lastTrack);
+  }
+
+  $('langBtn').addEventListener('click', () => {
+    lang = lang === 'es' ? 'en' : 'es';
+    try { localStorage.setItem('od-lang', lang); } catch (e) {}
+    applyLang();
+  });
+
+  // Sidebar and tabs
+  function setMenu(open) {
+    document.querySelector('.side').classList.toggle('open', open);
+    $('menuBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  $('menuBtn').addEventListener('click', () => setMenu($('menuBtn').getAttribute('aria-expanded') !== 'true'));
+
+  function showTab(name) {
+    document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== name; });
+    document.querySelectorAll('[data-tab]').forEach(b => {
+      if (b.dataset.tab === name) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    if (name === 'issues' && map) setTimeout(() => map.invalidateSize(), 50);
+  }
+  document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
+    showTab(b.dataset.tab); setMenu(false);
+    const h = document.querySelector('#' + b.dataset.tab + ' h2');
+    (h || $('main')).focus();
+  }));
+  $('checkFirst').addEventListener('click', () => { showTab('issues'); $('q').focus(); });
+  $('goTrack').addEventListener('click', () => { showTab('track'); $('trackId').focus(); });
+
+  // Voice input. Speech recognition turns speech into text, and a parallel recording lets people play it back.
+  // The recording stays in the browser. Only the text is sent with the report.
+  // Apps Script serves the page inside a Google frame that does not allow the microphone, so in-page voice
+  // only works when the page is opened on its own. Otherwise residents use the mic on their phone's keyboard (see dictHint).
+  const Speech = window.self === window.top && (window.SpeechRecognition || window.webkitSpeechRecognition);
+  const voice = { s: null, clip: null };
+
+  function voiceNote(key) { $('voiceNote').textContent = key ? t(key) : ''; }
+
+  function voiceRender() {
+    if (!Speech) return;
+    const listening = !!voice.s && !voice.s.stopped;
+    const playing = !!voice.clip && !voice.clip.audio.paused;
+    $('micBtn').hidden = !!voice.clip;
+    $('micBtn').disabled = !!voice.s && voice.s.stopped;
+    $('micBtn').setAttribute('aria-pressed', listening ? 'true' : 'false');
+    $('micLabel').textContent = t(listening ? 'listening' : 'speak');
+    $('voiceBar').hidden = !voice.clip;
+    $('playBtn').classList.toggle('playing', playing);
+    $('playLabel').textContent = t(playing ? 'pause' : 'play');
+  }
+
+  function dropText(text) {
+    if (!text) return;
+    const d = $('description'), i = d.value.indexOf(text);
+    if (i >= 0) d.value = (d.value.slice(0, i).replace(/\s+$/, '') + ' ' + d.value.slice(i + text.length).replace(/^\s+/, '')).trim();
+  }
+  function stopRecorder(s) { try { if (s.recorder && s.recorder.state !== 'inactive') s.recorder.stop(); } catch (e) {} }
+  function releaseMic(s) { if (s.stream) s.stream.getTracks().forEach(tr => tr.stop()); s.stream = null; }
+
+  // Throws away the current recording or clip, and the text it added to the description.
+  function discard() {
+    const s = voice.s, c = voice.clip;
+    voice.s = null; voice.clip = null;
+    if (s) { s.dead = true; clearTimeout(s.timer); try { s.rec.abort(); } catch (e) {} stopRecorder(s); releaseMic(s); dropText(s.text); }
+    if (c) { c.audio.pause(); URL.revokeObjectURL(c.url); dropText(c.text); }
+    voiceNote(''); voiceRender();
+  }
+
+  // Called when speech recognition or the audio recorder finishes. The clip is saved once both are done.
+  function part(s) {
+    if (s.dead || --s.pending > 0) return;
+    clearTimeout(s.timer); releaseMic(s);
+    voice.s = null;
+    if (!s.text) { if (!s.err) voiceNote('noSpeech'); }
+    else if (s.chunks.length) {
+      const url = URL.createObjectURL(new Blob(s.chunks, { type: s.recorder.mimeType || 'audio/webm' }));
+      const audio = new Audio(url);
+      ['play', 'pause', 'ended'].forEach(ev => audio.addEventListener(ev, voiceRender));
+      voice.clip = { url: url, audio: audio, text: s.text };
+    } else voiceNote('noPlayback');
+    voiceRender();
+  }
+  function recDone(s) { if (!s.recFinished) { s.recFinished = true; part(s); } }
+
+  function voiceStart() {
+    discard();
+    const s = { text: '', chunks: [], stream: null, recorder: null, rec: new Speech(), pending: 1, stopped: false, dead: false, err: false, recFinished: false, timer: null };
+    const r = s.rec;
+    r.lang = lang === 'es' ? 'es-US' : 'en-US';
+    r.continuous = true;
+    r.interimResults = false;
+    r.onresult = e => {
+      if (s.dead) return;
+      let piece = '';
+      for (let k = e.resultIndex; k < e.results.length; k++) if (e.results[k].isFinal) piece += ' ' + e.results[k][0].transcript;
+      piece = piece.trim();
+      if (!piece) return;
+      s.text = (s.text + ' ' + piece).trim();
+      $('description').value = ($('description').value + ' ' + piece).trim();
+    };
+    r.onerror = e => {
+      if (s.dead || e.error === 'aborted') return;
+      s.err = true;
+      voiceNote(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'micDenied' : e.error === 'no-speech' ? 'noSpeech' : 'error');
+    };
+    r.onend = () => { if (s.dead) return; s.stopped = true; stopRecorder(s); recDone(s); };
+    voice.s = s;
+    try { r.start(); } catch (e) { voice.s = null; voiceNote('error'); voiceRender(); return; }  // inside the click, as mobile browsers require
+    voiceRender();
+    // Record the same speech for playback. If the browser won't share the microphone, we still transcribe.
+    if (navigator.mediaDevices && window.MediaRecorder) {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        if (s.dead || s.stopped) { stream.getTracks().forEach(tr => tr.stop()); return; }
+        s.stream = stream;
+        const rcd = new MediaRecorder(stream);
+        s.recorder = rcd; s.pending++;
+        rcd.ondataavailable = ev => { if (ev.data && ev.data.size) s.chunks.push(ev.data); };
+        rcd.onstop = () => part(s);
+        rcd.start();
+      }).catch(() => { releaseMic(s); });
+    }
+  }
+
+  function voiceStop() {
+    const s = voice.s;
+    if (!s || s.stopped) return;
+    s.stopped = true;
+    try { s.rec.stop(); } catch (e) {}
+    stopRecorder(s);
+    voiceRender();  // the button changes right away
+    s.timer = setTimeout(() => { try { s.rec.abort(); } catch (e) {} recDone(s); }, 2500);  // if the browser never reports the end
+  }
+
+  if (!Speech) {
+    // Inside Google's frame the browser's speech service is not available, so Speak records the
+    // microphone in the page, converts it to a small WAV file and Gemini writes down what was said.
+    // If the browser won't share the microphone, it falls back to the device's recorder or a file.
+    const rec = { stream: null, recorder: null, chunks: [], timer: null, startedAt: 0 };
+    const micBtn = $('micBtn');
+    micBtn.hidden = false;
+
+    function setRecording(on) {
+      micBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      $('micLabel').textContent = t(on ? 'stopRec' : 'speak');
+    }
+    function stopTracks() { if (rec.stream) rec.stream.getTracks().forEach(tr => tr.stop()); rec.stream = null; }
+
+    // Decodes whatever the browser recorded and re-encodes it as 16 kHz mono WAV, a format Gemini always accepts.
+    async function toWav(blob) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AC();
+      const buf = await ctx.decodeAudioData(await blob.arrayBuffer());
+      ctx.close && ctx.close();
+      const rate = 16000, src = buf.getChannelData(0), ratio = buf.sampleRate / rate;
+      const n = Math.floor(src.length / ratio), view = new DataView(new ArrayBuffer(44 + n * 2));
+      const str = (o, x) => { for (let i = 0; i < x.length; i++) view.setUint8(o + i, x.charCodeAt(i)); };
+      str(0, 'RIFF'); view.setUint32(4, 36 + n * 2, true); str(8, 'WAVE'); str(12, 'fmt ');
+      view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+      view.setUint32(24, rate, true); view.setUint32(28, rate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+      str(36, 'data'); view.setUint32(40, n * 2, true);
+      for (let i = 0; i < n; i++) {
+        const v = Math.max(-1, Math.min(1, src[Math.floor(i * ratio)]));
+        view.setInt16(44 + i * 2, v < 0 ? v * 0x8000 : v * 0x7fff, true);
+      }
+      return new Blob([view], { type: 'audio/wav' });
+    }
+
+    function sendAudio(blob, name) {
+      micBtn.disabled = true; voiceNote('voiceWorking');
+      const reader = new FileReader();
+      reader.onload = () => {
+        google.script.run.withSuccessHandler(r => {
+          micBtn.disabled = false;
+          const d = $('description');
+          d.value = (d.value.trim() + ' ' + r.text).trim();
+          d.dispatchEvent(new Event('input'));
+          voiceNote('voiceAdded'); d.focus();
+        }).withFailureHandler(err => {
+          micBtn.disabled = false;
+          $('voiceNote').textContent = (err && err.message ? err.message + ' ' : '') + t('dictHint');
+        }).transcribeVoice({ name: name, type: blob.type, data: String(reader.result).split(',')[1] });
+      };
+      reader.onerror = () => { micBtn.disabled = false; voiceNote('error'); };
+      reader.readAsDataURL(blob);
+    }
+
+    async function startRecording() {
+      if (!navigator.mediaDevices || !window.MediaRecorder) throw new Error('unsupported');
+      rec.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      rec.chunks = [];
+      rec.recorder = new MediaRecorder(rec.stream);
+      rec.recorder.ondataavailable = e => { if (e.data && e.data.size) rec.chunks.push(e.data); };
+      rec.recorder.onstop = async () => {
+        clearTimeout(rec.timer); stopTracks(); setRecording(false);
+        const raw = new Blob(rec.chunks, { type: rec.recorder.mimeType || 'audio/webm' });
+        if (Date.now() - rec.startedAt < 700 || !raw.size) { voiceNote('noSpeech'); return; }
+        let wav = null;
+        try { wav = await toWav(raw); } catch (e) { wav = null; }
+        sendAudio(wav || raw, wav ? 'voice.wav' : 'voice.webm');
+      };
+      rec.recorder.start();
+      rec.startedAt = Date.now();
+      rec.timer = setTimeout(() => { if (rec.recorder.state === 'recording') rec.recorder.stop(); }, 90000);
+      setRecording(true); voiceNote('recording');
+    }
+
+    micBtn.addEventListener('click', async () => {
+      if (rec.recorder && rec.recorder.state === 'recording') { rec.recorder.stop(); return; }
+      try { await startRecording(); }
+      catch (e) {
+        stopTracks(); setRecording(false);
+        // If the page's frame blocks the microphone, record in a small window of our own instead.
+        if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') && openRecorderWindow()) return;
+        if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) voiceNote('micBlocked');
+        // Last resort: the device's recorder (phones) or an audio file.
+        $('voiceFile').value = ''; $('voiceFile').click();
+      }
+    });
+
+    // A small top-level window is not inside Google's frame, so the browser lets it use the microphone.
+    // It records and hands the audio back to this page, which converts and sends it as usual.
+    window.__odVoiceDone = async (raw) => {
+      if (!raw || !raw.size) { voiceNote('noSpeech'); return; }
+      let wav = null;
+      try { wav = await toWav(raw); } catch (e) { wav = null; }
+      sendAudio(wav || raw, wav ? 'voice.wav' : 'voice.webm');
+    };
+    function openRecorderWindow() {
+      const w = window.open('', 'onedoor-voice', 'width=440,height=340');
+      if (!w) return false;
+      const es = lang === 'es';
+      const txt = {
+        title: es ? 'Grabar su reporte' : 'Record your report',
+        start: es ? 'Empezar a grabar' : 'Start recording',
+        stop: es ? 'Parar y agregar' : 'Stop and add',
+        hint: es ? 'Hable en español o inglés. Sus palabras aparecerán en el formulario.' : 'Speak in English or Spanish. Your words will appear in the form.',
+        rec: es ? 'Grabando…' : 'Recording…',
+        denied: es ? 'Se bloqueó el micrófono. Permítalo en la barra de direcciones.' : 'The microphone was blocked. Allow it in the address bar.',
+      };
+      w.document.open();
+      w.document.write('<!doctype html><html lang="' + lang + '"><head><meta charset="utf-8"><title>' + txt.title + '</title>' +
+        '<style>body{margin:0;font:16px/1.5 system-ui,sans-serif;background:#f6f0e6;color:#161412;display:flex;flex-direction:column;gap:14px;padding:24px}' +
+        'h1{font-size:1.3rem;margin:0}button{font:inherit;font-weight:650;border:0;border-radius:999px;padding:14px 24px;background:#161412;color:#fffaf3;cursor:pointer}' +
+        'button:focus-visible{outline:3px solid #161412;outline-offset:2px;box-shadow:0 0 0 2px #ffbf47}button.on{background:#b42318}p{margin:0}</style></head><body>' +
+        '<h1>' + txt.title + '</h1><p>' + txt.hint + '</p><button id="b" type="button">' + txt.start + '</button><p id="s" role="status" aria-live="polite"></p></body></html>');
+      w.document.close();
+      const b = w.document.getElementById('b'), st = w.document.getElementById('s');
+      let mr = null, chunks = [], stream = null;
+      b.focus();
+      b.addEventListener('click', async () => {
+        if (mr && mr.state === 'recording') { mr.stop(); return; }
+        try {
+          stream = await w.navigator.mediaDevices.getUserMedia({ audio: true });
+          chunks = [];
+          mr = new w.MediaRecorder(stream);
+          mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+          mr.onstop = () => {
+            stream.getTracks().forEach(tr => tr.stop());
+            const blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+            window.__odVoiceDone(blob);
+            w.close();
+          };
+          mr.start();
+          b.textContent = txt.stop; b.classList.add('on'); st.textContent = txt.rec;
+        } catch (e) { st.textContent = txt.denied; }
+      });
+      voiceNote('popupHint');
+      return true;
+    }
+    $('voiceFile').addEventListener('change', () => {
+      const file = $('voiceFile').files[0];
+      if (!file) return;
+      if (file.size > 8 * 1024 * 1024) { voiceNote('voiceTooBig'); return; }
+      sendAudio(file, file.name);
+    });
+  }
+  if (Speech) {
+    $('micBtn').hidden = false;
+    $('micBtn').addEventListener('click', () => { if (!voice.s) voiceStart(); else voiceStop(); });
+    $('playBtn').addEventListener('click', () => {
+      const a = voice.clip && voice.clip.audio;
+      if (!a) return;
+      if (a.paused) a.play().catch(() => {}); else a.pause();
+    });
+    $('redoBtn').addEventListener('click', voiceStart);
+    $('delBtn').addEventListener('click', discard);
+    $('reportForm').addEventListener('reset', discard);
+  }
+
+  // Report form
+  function readPhoto(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve(null);
+      const img = new Image();
+      img.onload = () => {
+        // Shrink big phone photos so uploads stay fast and under the size limit.
+        const scale = Math.min(1, 1600 / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        resolve({ name: file.name, type: 'image/jpeg', data: c.toDataURL('image/jpeg', 0.8).split(',')[1] });
+      };
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  $('reportForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const out = $('reportResult');
+    if (!validateReport()) return;
+    const btn = $('submitBtn');
+    btn.disabled = true; btn.textContent = t('sending');
+    btn.setAttribute('aria-busy', 'true');
+    out.className = 'result wait'; out.textContent = t('working');
+    const slowTimer = setTimeout(() => { out.textContent = t('slow'); }, 8000);
+    const done = () => { clearTimeout(slowTimer); btn.disabled = false; btn.textContent = t('submit'); btn.removeAttribute('aria-busy'); };
+    let photo = null;
+    try { photo = await readPhoto($('photo').files[0]); } catch (err) { photo = null; }
+    google.script.run
+      .withSuccessHandler(res => {
+        done();
+        $('reportForm').reset();
+        lastReport = res; showReport(res);
+        out.focus();
+        loadData();
+      })
+      .withFailureHandler(err => {
+        done();
+        out.className = 'result error'; out.textContent = t('error') + ' (' + err.message + ')';
+        out.focus();
+      })
+      .submitReport({
+        description: $('description').value, address: $('address').value,
+        district: $('district').value, email: $('email').value, photo: photo,
+      });
+  });
+
+  // Marks each empty required field, lists the problems at the top, and moves focus there (WCAG 3.3.1).
+  const REQUIRED = [['description', 'needDescField'], ['address', 'needAddrField']];
+  function clearFieldErr(id) {
+    const el = $(id), msg = $(id + 'Err');
+    el.removeAttribute('aria-invalid');
+    if (msg) msg.remove();
+    el.setAttribute('aria-describedby', (el.getAttribute('aria-describedby') || '').replace(id + 'Err', '').trim());
+  }
+  function validateReport() {
+    const bad = REQUIRED.filter(([id]) => !$(id).value.trim());
+    REQUIRED.forEach(([id]) => clearFieldErr(id));
+    const box = $('formErr');
+    if (!bad.length) { box.hidden = true; box.innerHTML = ''; return true; }
+    bad.forEach(([id, key]) => {
+      const el = $(id), msg = document.createElement('p');
+      msg.id = id + 'Err'; msg.className = 'field-err'; msg.textContent = t(key);
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', ((el.getAttribute('aria-describedby') || '') + ' ' + msg.id).trim());
+      (el.closest('.box') || el).insertAdjacentElement('afterend', msg);
+    });
+    box.innerHTML = '<p><strong>' + esc(t('errTitle')) + '</strong></p><ul>' +
+      bad.map(([id, key]) => '<li><a href="#' + id + '">' + esc(t(key)) + '</a></li>').join('') + '</ul>';
+    box.hidden = false; box.focus();
+    return false;
+  }
+  $('formErr').addEventListener('click', e => {
+    const a = e.target.closest('a');
+    if (a) { e.preventDefault(); $(a.getAttribute('href').slice(1)).focus(); }
+  });
+  REQUIRED.forEach(([id]) => $(id).addEventListener('input', () => { if ($(id).value.trim()) clearFieldErr(id); }));
+
+  function showReport(r) {
+    const cat = lang === 'es' ? r.categoryEs : r.categoryEn;
+    let html = '';
+    if (r.emergency) html += '<p class="callout"><strong>' + esc(t('emergencyNow')) + '</strong></p>';
+    html += '<p><strong>' + esc(t('thanks')) + '</strong></p>';
+    html += '<p>' + esc(t('yourNumber')) + ':<br><span class="big">' + esc(r.trackingId) + '</span><br>' + esc(t('saveIt')) + '</p>';
+    html += '<p>' + esc(t('sortedAs')) + ' <strong>' + esc(cat) + '</strong>' +
+      (r.district ? ' · ' + esc(t('district')) + ' ' + esc(r.district) : '') +
+      '. ' + esc(t('handledBy')) + ': ' + esc(r.department) + '.</p>';
+    if (r.reportCount > 1) html += '<p>' + esc(t('others')(r.reportCount)) + '</p>';
+    if (r.owner === 'County') html += '<p>' + esc(t('county')) + ' <a href="' + esc(r.countyUrl) + '" target="_blank" rel="noopener">' + esc(r.countyUrl) + '</a></p>';
+    $('reportResult').innerHTML = html;
+  }
+
+  // Public issues
+  function loadData() {
+    google.script.run.withSuccessHandler(d => {
+      data = d;
+      const cur = $('fDistrict').value;
+      const districts = Array.from(new Set(d.issues.map(i => i.district).filter(Boolean))).sort();
+      $('fDistrict').innerHTML = '<option value="">' + esc(t('all')) + '</option>' +
+        districts.map(x => '<option value="' + esc(x) + '">' + esc(t('district')) + ' ' + esc(x) + '</option>').join('');
+      $('fDistrict').value = cur;
+      fillStatusFilter();
+      renderIssues(); renderSpending();
+    }).withFailureHandler(() => { $('issueList').textContent = t('error'); }).getPublicData();
+  }
+
+  function fillStatusFilter() {
+    const cur = $('fStatus').value;
+    $('fStatus').innerHTML = '<option value="">' + esc(t('all')) + '</option>' +
+      Object.keys(T.en.status).map(s => '<option value="' + esc(s) + '">' + esc(t('status')[s]) + '</option>').join('');
+    $('fStatus').value = cur;
+  }
+  $('fDistrict').addEventListener('change', renderIssues);
+  $('fStatus').addEventListener('change', renderIssues);
+  $('q').addEventListener('input', renderIssues);
+
+  function renderIssues() {
+    if (!data) return;
+    const d = $('fDistrict').value, s = $('fStatus').value, q = $('q').value.trim();
+    const list = data.issues.filter(i => (!d || i.district === d) && (!s || i.status === s) && matches(i, q));
+    const stats = [
+      [list.filter(i => OPEN.indexOf(i.status) >= 0).length, t('openIssues')],
+      [list.reduce((a, i) => a + i.count, 0), t('totalReports')],
+      [list.filter(i => i.status === 'Fixed').length, t('fixed')],
+      [list.filter(i => i.owner === 'County').length, t('referred')],
+    ];
+    $('tiles').innerHTML = stats.map(x => '<div><b>' + x[0] + '</b><span>' + esc(x[1]) + '</span></div>').join('');
+    $('issueCount').textContent = t('shown')(list.length);
+
+    $('issueList').innerHTML = list.length ? list.map(i => {
+      const note = lang === 'es' ? i.noteEs : i.noteEn;
+      return '<li class="issue"><div class="count"><b>' + i.count + '</b><span>' + esc(i.count === 1 ? t('report1') : t('reports')) + '</span></div><div>' +
+        '<h3>' + esc(title(i)) + '</h3>' +
+        '<p class="meta">' + statusBadge(i.status) + esc(lang === 'es' ? i.categoryEs : i.categoryEn) +
+        (i.district ? ' · ' + esc(t('district')) + ' ' + esc(i.district) : '') +
+        (i.block ? ' · ' + esc(i.block) : '') + '</p>' +
+        '<p class="meta">' + esc(t('reported')) + ': ' + esc(day(i.firstReported)) + ' · ' + esc(i.department) +
+        (i.estCost ? ' · ' + esc(t('est')) + ': ' + money(i.estCost) : '') + '</p>' +
+        (note ? '<p class="meta">' + esc(t('note')) + ': ' + esc(note) + '</p>' : '') +
+        (i.sample ? '<p class="sample">' + esc(t('sampleLabel')) + '</p>' : '') +
+        '</div></li>';
+    }).join('') : '<li class="empty">' + esc(t('noIssues')) + (q ? ' ' + esc(t('notYet')) + ' <button type="button" class="act go" id="reportThis">' + esc(t('reportThis')) + '</button>' : '') + '</li>';
+    const rt = $('reportThis');
+    if (rt) rt.addEventListener('click', () => {
+      if (!$('description').value.trim()) $('description').value = q;
+      showTab('report'); $('description').focus();
+    });
+
+    renderMap(list);
+  }
+
+  function renderMap(list) {
+    if (!window.L) return;
+    if (!map) {
+      // The map is a visual summary of the list below, hidden from screen readers, so it has no focusable controls.
+      // OpenStreetMap credit is in the caption under it.
+      map = L.map('map', { scrollWheelZoom: false, keyboard: false, zoomControl: false, attributionControl: false }).setView([33.815, -84.575], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    }
+    if (layer) layer.remove();
+    const colors = { 'Received': '#5b6470', 'Assigned': '#0b5cad', 'In progress': '#b07300', 'Fixed': '#0f7b5f', 'Referred to Cobb County': '#6b3fa0' };
+    layer = L.layerGroup(list.filter(i => i.lat).map(i => L.circleMarker([i.lat, i.lng], {
+      radius: 5 + Math.min(14, i.count * 1.5), color: colors[i.status] || '#333', weight: 2, fillOpacity: 0.35,
+    }).bindPopup('<strong>' + esc(title(i)) + '</strong><br>' + i.count + ' ' + esc(t('reports')) + ' · ' + esc(t('status')[i.status] || i.status)))).addTo(map);
+  }
+
+  // Spending
+  function renderSpending() {
+    if (!data) return;
+    const max = Math.max.apply(null, data.budget.map(b => b.budget).concat([1]));
+    $('budgetList').innerHTML = data.budget.map(b =>
+      '<div><strong>' + esc(b.department) + '</strong> · ' + money(b.budget) + ' <span class="meta">(' + esc(b.type) + ')</span>' +
+      '<div class="bar" role="img" aria-label="' + esc(b.department + ' ' + money(b.budget)) + '"><i style="width:' + (100 * b.budget / max).toFixed(1) + '%"></i></div></div>'
+    ).join('') + (data.budget[0] ? '<p class="meta">' + esc(t('source')) + ': <a href="' + esc(data.budget[0].source) + '" target="_blank" rel="noopener">mableton.gov FY2027 budget</a></p>' : '');
+
+    const byDept = {};
+    data.issues.filter(i => i.owner === 'City').forEach(i => {
+      const r = byDept[i.department] = byDept[i.department] || { n: 0, fixed: 0, est: 0, spent: 0, sample: false };
+      r.n++; if (i.status === 'Fixed') r.fixed++;
+      r.est += i.estCost; r.spent += i.spent; r.sample = r.sample || i.sample;
+    });
+    const rows = Object.keys(byDept).sort((a, b) => byDept[b].n - byDept[a].n);
+    const anySample = rows.some(k => byDept[k].sample);
+    $('deptTable').innerHTML = '<caption class="meta">' + (anySample ? esc(t('costNote')) : '') + '</caption>' +
+      '<thead><tr><th scope="col">' + esc(t('dept')) + '</th><th scope="col" class="num">' + esc(t('issuesCol')) + '</th><th scope="col" class="num">' +
+      esc(t('fixedCol')) + '</th><th scope="col" class="num">' + esc(t('est')) + '</th><th scope="col" class="num">' + esc(t('spent')) + '</th></tr></thead><tbody>' +
+      rows.map(k => '<tr><th scope="row">' + esc(k) + '</th><td class="num">' + byDept[k].n + '</td><td class="num">' + byDept[k].fixed +
+        '</td><td class="num">' + money(byDept[k].est) + '</td><td class="num">' + money(byDept[k].spent) + '</td></tr>').join('') + '</tbody>';
+  }
+
+  // Track
+  $('trackForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('trackId').value.trim();
+    if (!id) return;
+    $('trackResult').className = 'result'; $('trackResult').textContent = t('loading');
+    google.script.run.withSuccessHandler(r => {
+      lastTrack = r || 'notfound'; showTrack(lastTrack); $('trackResult').focus();
+    }).withFailureHandler(() => { $('trackResult').className = 'result error'; $('trackResult').textContent = t('error'); }).lookupRequest(id);
+  });
+
+  function showTrack(r) {
+    const out = $('trackResult');
+    if (r === 'notfound') { out.className = 'result error'; out.textContent = t('notFound'); return; }
+    out.className = 'result';
+    const i = r.issue || {};
+    const note = lang === 'es' ? i.noteEs : i.noteEn;
+    const steps = r.owner === 'County' ? [] : [
+      [t('stReceived'), r.received], [t('stAssigned'), i.assignedAt], [t('stProgress'), i.inProgressAt], [t('stFixed'), i.fixedAt],
+    ];
+    out.innerHTML = '<p class="big">' + esc(r.trackingId) + '</p>' +
+      '<p>' + statusBadge(i.status || 'Received') + '<strong>' + esc(lang === 'es' ? r.categoryEs : r.categoryEn) + '</strong>' +
+      (r.district ? ' · ' + esc(t('district')) + ' ' + esc(r.district) : '') + (i.block ? ' · ' + esc(i.block) : '') + '</p>' +
+      '<p class="meta">' + esc(t('handledBy')) + ': ' + esc(r.department) + (i.count > 1 ? ' · ' + esc(t('others')(i.count)) : '') + '</p>' +
+      (r.owner === 'County' ? '<p>' + esc(t('county')) + ' <a href="' + esc(r.countyUrl) + '" target="_blank" rel="noopener">' + esc(r.countyUrl) + '</a></p>' : '') +
+      (steps.length ? '<ol class="steps">' + steps.map(s => '<li class="' + (s[1] ? 'done' : '') + '">' + esc(s[0]) + (s[1] ? ' · ' + esc(day(s[1])) : '') + '</li>').join('') + '</ol>' : '') +
+      (note ? '<p><strong>' + esc(t('note')) + ':</strong> ' + esc(note) + '</p>' : '');
+  }
+
+  // Resources and FAQ. Edit these lists to add or change entries.
+  const LINKS = [
+    { url: 'https://www.mableton.gov', en: 'City of Mableton', es: 'Ciudad de Mableton',
+      dEn: 'News, meetings, departments and contacts.', dEs: 'Noticias, reuniones, departamentos y contactos.' },
+    { url: 'https://www.mableton.gov/1212/Resident-Resource-Guide', en: 'Resident Resource Guide', es: 'Guía de recursos para residentes',
+      dEn: 'What the city handles and what stays with Cobb County.', dEs: 'Qué atiende la ciudad y qué sigue a cargo del Condado de Cobb.' },
+    { url: 'https://www.mableton.gov/1201/Code-Enforcement-Department', en: 'Code Enforcement', es: 'Cumplimiento de códigos',
+      dEn: 'Submit a complaint and see how enforcement works.', dEs: 'Presente una queja y vea cómo funciona el proceso.' },
+    { url: 'https://www.mableton.gov/1418/Common-Code-Enforcement-Issues', en: 'Common code enforcement issues', es: 'Problemas comunes de códigos',
+      dEn: 'Tall grass, junk vehicles, dumping, signs and more.', dEs: 'Pasto alto, vehículos abandonados, basura, letreros y más.' },
+    { url: 'https://cobbcounty.org/services', en: 'Cobb County services', es: 'Servicios del Condado de Cobb',
+      dEn: 'Roads, streetlights, water, animal services, police and more.', dEs: 'Calles, alumbrado, agua, control de animales, policía y más.' },
+  ];
+
+  // Each entry is [English, Spanish].
+  const FAQ = [
+    { q: ['Is this an official City of Mableton service?', '¿Es un servicio oficial de la Ciudad de Mableton?'],
+      a: ['No. This is a prototype built for the Georgia 311 Challenge. In an emergency, call 911.', 'No. Es un prototipo creado para el Georgia 311 Challenge. En una emergencia, llame al 911.'] },
+    { q: ['Does the city or the county handle my problem?', '¿Lo atiende la ciudad o el condado?'],
+      a: ['The city handles code enforcement, trash and recycling pickup, business licenses and parks. Cobb County handles major roads, traffic signals and streetlights, flooding and storm drains, water and sewer, animal control and police. If your report belongs to the county, we tell you and link to Cobb County.',
+          'La ciudad atiende el cumplimiento de códigos, la recolección de basura y reciclaje, las licencias de negocio y los parques. El Condado de Cobb atiende las calles principales, los semáforos y el alumbrado, las inundaciones y desagües, el agua y alcantarillado, el control de animales y la policía. Si su reporte es del condado, se lo decimos y le damos el enlace.'] },
+    { q: ['What happens after I send a report?', '¿Qué pasa después de enviar un reporte?'],
+      a: ['We sort it by type and location and group it with matching reports. City staff then review it and update its status, from Received to Fixed. Use your tracking number to follow along.',
+          'Lo clasificamos por tipo y ubicación y lo agrupamos con reportes parecidos. El personal de la ciudad lo revisa y actualiza su estado, de Recibido a Resuelto. Use su número de seguimiento para seguirlo.'] },
+    { q: ['How do I know if my problem was already reported?', '¿Cómo sé si ya reportaron mi problema?'],
+      a: ['Search the Issues page by street, problem or department. If it is already listed, your new report is added to the same issue and moves it up the list.',
+          'Busque en la página de Problemas por calle, problema o departamento. Si ya aparece, su nuevo reporte se suma al mismo problema y lo sube en la lista.'] },
+    { q: ['Do I have to give my email?', '¿Tengo que dar mi correo?'],
+      a: ['No. If you do, only city staff see it, and we use it to send updates. It never appears on the public page.',
+          'No. Si lo da, solo lo ve el personal de la ciudad y lo usamos para enviarle noticias. Nunca aparece en la página pública.'] },
+    { q: ['What is shown publicly?', '¿Qué se muestra al público?'],
+      a: ['Only the type of problem, district, block, number of reports, status and staff notes. Names, emails, descriptions and house numbers are never shown, and map points are rounded.',
+          'Solo el tipo de problema, el distrito, la cuadra, el número de reportes, el estado y las notas del personal. Nunca se muestran nombres, correos, descripciones ni números de casa, y los puntos del mapa se redondean.'] },
+    { q: ['What happens after a code enforcement complaint?', '¿Qué pasa después de una queja de cumplimiento de códigos?'],
+      a: ['An officer inspects and documents the problem. The owner may get a notice of violation with time to fix it. The officer then re-inspects, and if it is still not fixed, a court summons can follow.',
+          'Un oficial inspecciona y documenta el problema. Es posible que el dueño reciba un aviso de infracción con tiempo para corregirlo. Luego el oficial vuelve a inspeccionar y, si sigue sin corregirse, puede seguir una citación al tribunal.'] },
+    { q: ['Is my voice recording saved?', '¿Se guarda mi grabación de voz?'],
+      a: ['The recording stays in your browser so you can play it back. It is not sent with your report, only the text is. Your browser may use its own speech service to turn your voice into text.',
+          'La grabación se queda en su navegador para que pueda escucharla. No se envía con su reporte, solo el texto. Es posible que su navegador use su propio servicio de voz para convertir su voz en texto.'] },
+    { q: ['Can I report in Spanish?', '¿Puedo reportar en español?'],
+      a: ['Yes. Write or speak in English or Spanish, and use the language button to switch the whole site.',
+          'Sí. Escriba o hable en español o inglés, y use el botón de idioma para cambiar todo el sitio.'] },
+  ];
+
+  function renderHelp() {
+    const i = lang === 'es' ? 1 : 0;
+    const open = Array.from(document.querySelectorAll('#faqList details')).map(d => d.open);
+    $('linkList').innerHTML = LINKS.map(l => '<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(lang === 'es' ? l.es : l.en) +
+      '</a><span class="meta">' + esc(lang === 'es' ? l.dEs : l.dEn) + '</span></li>').join('');
+    $('faqList').innerHTML = FAQ.map((f, n) => '<details' + (open[n] ? ' open' : '') + '><summary>' + esc(f.q[i]) + '</summary><p>' + esc(f.a[i]) + '</p></details>').join('');
+  }
+
+  // Staff
+  // Server functions expected: staffLogin(passcode) -> token, staffGetIssues(token) -> issues[],
+  // staffUpdateIssue(token, {id, status, note, estCost, spent}) -> updated issue. They throw 'Unauthorized' on a bad token.
+  function staffMsg(text, isError) {
+    const m = $('staffMsg');
+    m.className = 'result' + (isError ? ' error' : '');
+    m.textContent = text || '';
+  }
+
+  function showStaffState() {
+    $('staffLogin').hidden = !!staffToken;
+    $('staffArea').hidden = !staffToken;
+  }
+
+  function staffSignOut(expired) {
+    staffToken = null; staffIssues = []; staffReplies = [];
+    try { sessionStorage.removeItem('od-staff'); } catch (e) {}
+    setStaffView('issues');
+    showStaffState();
+    staffMsg(expired ? t('sessionEnded') : '', false);
+  }
+
+  function staffFail(err) {
+    if (/unauthorized/i.test(err && err.message)) staffSignOut(true);
+    else { staffMsg(t('error') + ' (' + (err && err.message) + ')', true); renderStaff(); }
+  }
+
+  function loadStaff() {
+    google.script.run.withSuccessHandler(list => { staffIssues = list || []; renderStaff(); })
+      .withFailureHandler(staffFail).staffGetIssues(staffToken);
+    google.script.run.withSuccessHandler(list => { staffReplies = list || []; renderReplies(); })
+      .withFailureHandler(staffFail).staffGetReplies(staffToken);
+  }
+
+  function setStaffView(v) {
+    document.querySelectorAll('[data-sview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sview === v ? 'true' : 'false'));
+    $('sIssues').hidden = v !== 'issues';
+    $('sReplies').hidden = v !== 'replies';
+  }
+  document.querySelectorAll('[data-sview]').forEach(b => b.addEventListener('click', () => setStaffView(b.dataset.sview)));
+
+  function renderReplies() {
+    $('replyCount').textContent = staffReplies.length ? '(' + staffReplies.length + ')' : '';
+    $('replyList').innerHTML = staffReplies.length ? staffReplies.map(r =>
+      '<li class="srow" data-id="' + esc(r.id) + '">' +
+      '<p class="meta"><strong>' + esc(t('toLabel')) + ':</strong> ' + esc(r.to) + ' · ' + esc((t('reasons')[r.reason]) || r.reason) +
+      ' · ' + esc(r.trackingId) + (r.created ? ' · ' + esc(day(r.created)) : '') + '</p>' +
+      '<form class="reply">' +
+      '<div class="field"><label>' + esc(t('subjectLabel')) + '<input name="subject" value="' + esc(r.subject) + '"></label></div>' +
+      '<div class="field"><label>' + esc(t('messageLabel')) + '<textarea name="body" rows="6">' + esc(r.body) + '</textarea></label></div>' +
+      '<button type="submit" class="primary">' + esc(t('approveSend')) + '</button></form></li>'
+    ).join('') : '<li class="empty">' + esc(t('noReplies')) + '</li>';
+  }
+
+  $('replyList').addEventListener('submit', e => {
+    e.preventDefault();
+    const li = e.target.closest('.srow'), f = e.target.elements;
+    li.classList.add('busy'); staffMsg(t('saving'));
+    google.script.run.withSuccessHandler(list => {
+      staffReplies = list || []; staffMsg(t('sentOk')); renderReplies();
+    }).withFailureHandler(err => { li.classList.remove('busy'); staffFail(err); })
+      .staffApproveReply(staffToken, { id: li.dataset.id, subject: f.subject.value, body: f.body.value });
+  });
+
+  $('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('loginBtn');
+    btn.disabled = true; staffMsg('');
+    google.script.run.withSuccessHandler(token => {
+      btn.disabled = false;
+      if (!token) { staffMsg(t('badPass'), true); return; }
+      staffToken = token; $('pass').value = '';
+      try { sessionStorage.setItem('od-staff', token); } catch (err) {}
+      showStaffState(); loadStaff();
+    }).withFailureHandler(() => { btn.disabled = false; staffMsg(t('badPass'), true); }).staffLogin($('pass').value);
+  });
+  $('logoutBtn').addEventListener('click', () => staffSignOut(false));
+  $('sq').addEventListener('input', renderStaff);
+  $('sFilter').addEventListener('change', renderStaff);
+
+  function renderStaff() {
+    const q = $('sq').value.trim(), f = $('sFilter').value;
+    const list = staffIssues
+      .filter(i => (f === 'all' || (f === 'open' ? OPEN.indexOf(i.status) >= 0 : i.status === f)) && matches(i, q))
+      .sort((a, b) => b.count - a.count);
+    $('staffList').innerHTML = list.length ? list.map(i => {
+      const canStart = i.status === 'Received' || i.status === 'Assigned';
+      const note = lang === 'es' ? i.noteEs : i.noteEn;
+      return '<li class="srow" data-id="' + esc(i.id) + '"><div class="shead"><div>' +
+        '<h3>' + esc(title(i)) + '</h3>' +
+        '<p class="meta">' + statusBadge(i.status) + i.count + ' ' + esc(i.count === 1 ? t('report1') : t('reports')) + ' · ' + esc(i.department) +
+        (i.district ? ' · ' + esc(t('district')) + ' ' + esc(i.district) : '') + (i.block ? ' · ' + esc(i.block) : '') + '</p></div>' +
+        '<div class="actions">' +
+        (canStart ? '<button type="button" class="act go" data-act="start">' + esc(t('startWork')) + '</button>' : '') +
+        (i.status !== 'Fixed' ? '<button type="button" class="act go" data-act="fix">' + esc(t('markFixed')) + '</button>' : '') +
+        '<button type="button" class="act" data-act="edit" aria-expanded="false">' + esc(t('edit')) + '</button></div></div>' +
+        '<form class="sedit" hidden>' +
+        '<div class="field"><label>' + esc(t('statusLabel')) + '<select name="status">' +
+        Object.keys(T.en.status).map(s => '<option value="' + esc(s) + '"' + (s === i.status ? ' selected' : '') + '>' + esc(t('status')[s]) + '</option>').join('') + '</select></label></div>' +
+        '<div class="field"><label>' + esc(t('noteLabel')) + '<textarea name="note" rows="2">' + esc(note || '') + '</textarea></label></div>' +
+        '<div class="row"><div class="field"><label>' + esc(t('estLabel')) + '<input name="estCost" type="number" min="0" step="1" value="' + esc(i.estCost || '') + '"></label></div>' +
+        '<div class="field"><label>' + esc(t('spentLabel')) + '<input name="spent" type="number" min="0" step="1" value="' + esc(i.spent || '') + '"></label></div></div>' +
+        '<button type="submit" class="primary">' + esc(t('save')) + '</button></form></li>';
+    }).join('') : '<li class="empty">' + esc(t('noIssues')) + '</li>';
+  }
+
+  function staffSend(li, payload) {
+    li.classList.add('busy'); staffMsg(t('saving'));
+    google.script.run.withSuccessHandler(u => {
+      const idx = staffIssues.findIndex(x => String(x.id) === String(payload.id));
+      if (idx >= 0) staffIssues[idx] = u && u.id != null ? u : Object.assign(staffIssues[idx], payload);
+      staffMsg(t('saved')); renderStaff(); loadData();
+    }).withFailureHandler(staffFail).staffUpdateIssue(staffToken, payload);
+  }
+
+  $('staffList').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    const li = b.closest('.srow'), id = li.dataset.id;
+    if (b.dataset.act === 'edit') {
+      const form = li.querySelector('.sedit');
+      form.hidden = !form.hidden;
+      b.setAttribute('aria-expanded', form.hidden ? 'false' : 'true');
+    } else staffSend(li, { id: id, status: b.dataset.act === 'start' ? 'In progress' : 'Fixed' });
+  });
+  $('staffList').addEventListener('submit', e => {
+    e.preventDefault();
+    const li = e.target.closest('.srow'), f = e.target.elements;
+    staffSend(li, {
+      id: li.dataset.id, status: f.status.value, note: f.note.value.trim(),
+      estCost: Number(f.estCost.value) || 0, spent: Number(f.spent.value) || 0,
+    });
+  });
+
+  // Start
+  applyLang();
+  showStaffState();
+  if (staffToken) loadStaff();
+  showTab(document.body.dataset.page && $(document.body.dataset.page) ? document.body.dataset.page : 'report');
+  loadData();
+  if (document.body.dataset.trackId) {
+    $('trackId').value = document.body.dataset.trackId;
+    $('trackForm').requestSubmit();
+  }
+</script>

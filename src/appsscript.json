@@ -1,5 +1,10 @@
 {
   "timeZone": "America/New_York",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",
-  "exceptionLogging": "STACKDRIVER"
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
+  }
 }

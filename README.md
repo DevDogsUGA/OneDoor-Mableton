@@ -1,36 +1,153 @@
 # OneDoor Mableton
 
-Georgia 311 Challenge 2026 · DevDogs (GDG on Campus UGA)
+**Report it once. See it fixed. See where the money goes.**
 
-- Track: Tiny Desk, Civic Style
-- Advisor: Jack Harrington
-- Sprint: Oct 16–30, 2026. Demo Day: Fri Oct 30 at DevFest Atlanta.
+Georgia 311 Challenge 2026 · DevDogs (GDG on Campus UGA) · Track 3: Tiny Desk, Civic Style
+Team: Bhaumi Nadella, Sophie · Advisor: Jack Harrington
 
-## What's here
+OneDoor is one front door for Mableton residents to report neighborhood problems (illegal dumping, tall grass, junk cars, missed trash pickup) in English or Spanish. Gemini sorts each report, tells the resident whether the City or Cobb County handles it, and groups duplicate reports into one issue so a small staff sees a ranked list instead of a full inbox. Residents get a tracking number and can follow their request from Received to Fixed. A public page shows open issues by district and how department budgets compare with the cost of work.
 
-A [clasp](https://github.com/google/clasp) project, so the Apps Script code lives in Git. Nothing is built yet; that's up to you.
+> Prototype only. Not an official City of Mableton service. All issues and reports in the demo are labeled sample data. Department budgets are real public figures.
 
-| File | What it's for |
+## The problem
+
+- Mableton is one of Georgia's newest cities. It has about 60 staff for about 78,000 residents and still splits services with Cobb County: the city handles code enforcement, sanitation, zoning and licensing, and Cobb handles roads, police, water and stormwater. Residents have to guess who owns their problem.
+- Complaints arrive by phone, email and web form. Council members say residents often get only an automated reply, then email them directly for updates.
+- Cobb DOT collects about 800 pounds of dumped trash a day in the area. In 2026 the council raised dumping fines to $500 and $1,000.
+- About 1 in 4 residents is Hispanic and 17% were born abroad, so a report form that works only in English leaves people out.
+
+Sources are listed at the bottom.
+
+## What it does
+
+| For | Feature |
 | --- | --- |
-| `src/Code.gs` | Your code. It has a `testGemini()` to check the API key. |
-| `src/appsscript.json` | Project settings (time zone, runtime). Apps Script adds permission scopes as you use services. |
+| Residents | Report form in English or Spanish: type, **speak** (Gemini transcribes the recording) or add a photo, plus an address. Works on a phone, with keyboard and with screen readers (WCAG 2.2 AA). |
+| Residents | Instant answer: category, the department that handles it, and a tracking number. County problems get a link to Cobb County instead of a dead end. |
+| Residents | **Issues** page: open problems by district, most-reported first, with a map. No names, emails, descriptions or house numbers are shown, and map points are rounded to about 100 m. |
+| Residents | **Where the money goes**: FY2027 department budgets (with source links) next to staff-entered costs of reported work. |
+| Residents | **Track my request**: a timeline of received, assigned, in progress and fixed, plus staff notes. |
+| Staff | Passcode-protected **Staff** page, or the Google Sheet: change status, add a public note (auto-translated) and costs. |
+| Staff | **Approve before send**: Gemini drafts every resident email in their language, and nothing is sent until a person approves it. |
+| Staff | Weekly district digest: Gemini summarizes each district's top themes in English and Spanish (`buildWeeklyDigest`, scheduled Mondays 7am). The Sheet also feeds a Looker Studio dashboard. |
 
-The stack is all Google: [Forms](https://developers.google.com/apps-script/reference/forms), [Sheets](https://developers.google.com/apps-script/reference/spreadsheet), [Apps Script](https://developers.google.com/apps-script) and the [Gemini API](https://ai.google.dev/gemini-api/docs), plus [Looker Studio](https://lookerstudio.google.com) for dashboards. There's no build step and nothing to deploy.
+## How it works
 
-## Set up
+```
+Resident (web page or Google Form)
+        │
+        ▼
+Apps Script ──► Gemini API: category, language, emergency flag, duplicate check, reply draft
+        │  └──► US Census geocoder: address → map point, inside city limits?
+        ▼
+Google Sheet (Requests, Issues, Replies, Budget, Digest) ──► Looker Studio staff dashboard
+        ▲
+City staff (Staff page or Sheet): status, notes, costs, approve replies → email to resident
+```
 
-You need [Node.js](https://nodejs.org) for clasp.
+If Gemini is busy or down, keyword rules and template replies take over, so intake never stops.
+
+### Data it uses
+
+| Data | Source | Public? |
+| --- | --- | --- |
+| Department budgets | City of Mableton FY2027 budget (mableton.gov/DocumentCenter/View/911) | Yes, real figures |
+| Report categories | City of Mableton "Common Code Enforcement Issues" (mableton.gov/1418) | Yes |
+| Address lookup | US Census Geocoder (free, no key) | Yes |
+| Map tiles | OpenStreetMap | Yes |
+| Issues and reports | Generated by `seedSampleData()`, every row marked `Sample data = Yes` | Sample only |
+| Per-issue costs | Entered by staff; sample figures in the demo | Labeled as sample |
+
+Resident emails and full addresses stay in the private Sheet. Photos go to a private Drive folder.
+
+## Code layout
+
+| File | What it does |
+| --- | --- |
+| `src/Code.js` | `GEMINI_MODEL` and `testGemini()` |
+| `src/Config.js` | Categories (City or County owner, department, English and Spanish names), statuses, districts, links |
+| `src/Setup.js` | `setup()`: creates the Sheet, the bilingual Form, the photo folder and the triggers |
+| `src/Intake.js` | `processReport_()`: classify, geocode, route, group duplicates, save, queue reply |
+| `src/Gemini.js` | All Gemini calls with JSON schemas and fallbacks |
+| `src/Store.js` | Sheet tabs as tables (read, append, update) |
+| `src/Staff.js` | Sheet edit trigger (timestamps, send approved mail), weekly digest |
+| `src/Staffportal.js` | Staff page API behind `STAFF_PASSCODE` |
+| `src/WebApp.js` | `doGet` and the three public calls: `submitReport`, `getPublicData`, `lookupRequest` |
+| `src/SampleData.js` | `seedSampleData()` and `clearSampleData()` |
+| `src/Index.html`, `Css.html`, `Js.html` | The public site |
+
+## Run it yourself (about 20 minutes, no credit card)
+
+You need a Google account and [Node.js](https://nodejs.org).
 
 1. `npm install -g @google/clasp`, then `clasp login`.
 2. Turn on the Apps Script API at https://script.google.com/home/usersettings.
-3. One teammate creates the script: `clasp create --type standalone --title "OneDoor Mableton" --rootDir src`. Commit nothing from this step; `.clasp.json` is ignored. Share the script with your teammates (`clasp open`, then Share).
-4. Everyone else: copy `.clasp.json.example` to `.clasp.json` and paste the script ID (Project Settings in the editor).
-5. Get a Gemini API key at https://aistudio.google.com/apikey and choose the Google Cloud project `g311-onedoor-mableton`. In the editor, add it under Project Settings → Script Properties as `GEMINI_API_KEY`.
-6. `clasp push`, then run `testGemini` in the editor.
+3. Clone this repo, then `clasp create --type standalone --title "OneDoor Mableton" --rootDir src` and `clasp push`. If you are joining an existing script, copy `.clasp.json.example` to `.clasp.json` and paste its script ID instead.
+4. Get a free Gemini API key at https://aistudio.google.com/apikey. In the Apps Script editor (`clasp open-script`), open Project Settings → Script Properties and add:
+   - `GEMINI_API_KEY`: your key
+   - `STAFF_PASSCODE`: any passcode for the Staff page
+5. In the editor, run `testGemini`, then `setup`, then `seedSampleData`. Approve the permissions when asked. The log prints the Sheet and Form links.
+6. Deploy → New deployment → Web app. Execute as: Me. Who has access: Anyone. Copy the `/exec` URL and add it as the Script Property `WEB_APP_URL`.
+7. Open the `/exec` URL.
 
-If Gemini replies "This model is currently experiencing high demand", change `GEMINI_MODEL` in `src/Code.gs` to an older Flash model such as `gemini-3.5-flash`. The newest model is the busiest on the free tier.
+After a code change: `clasp push`, then Deploy → Manage deployments → Edit → New version → Deploy.
 
-## Working on it
+If Gemini says "This model is currently experiencing high demand", change `GEMINI_MODEL` in `src/Code.js` to an older Flash model.
 
-- `clasp push` uploads `src/` to the script; `clasp pull` downloads edits made in the browser editor. Pick one place to edit, or pull before you push.
-- Commit and open pull requests as usual; the script itself has no history, so Git is the record.
+## What changed from our proposal
+
+| Proposal | Prototype | Why |
+| --- | --- | --- |
+| Firebase Spark + Firebase AI Logic | Google Apps Script, Sheets, Forms and the Gemini API | Our advisor's recommendation: still free with no billing, and city staff can run it from tools they already use |
+| District tag from the public district map | The Census geocoder places every report; the resident picks the district | We could not find a public GeoJSON of Mableton's council districts. Add one with `DISTRICTS_GEOJSON_FILE_ID` and districts are set from the address |
+| Digest with themes, trends and quotes, shown on a map | Weekly themes and a bilingual summary per district, in the staff Sheet | Quotes, trends and a map layer are next |
+
+## Path to adoption
+
+OneDoor is built so a city clerk, not a developer, can run it. It uses tools the city already knows (Google Sheets and Forms), costs nothing to run at pilot scale, and every resident-facing message is approved by staff.
+
+**Phase 1: 30-day pilot in one district (weeks 1 to 4)**
+- Owner: the Code Enforcement manager, with one clerk.
+- Setup in one afternoon: copy the script into a city-owned Google account, run `setup`, add the key and passcode, deploy. Clear the sample data with `clearSampleData`.
+- Staff keep their current phone and email intake and enter those reports through the same form, so every complaint is tracked in one place.
+- Promote it with the existing city newsletter and a QR code on Code Enforcement notices.
+
+**Phase 2: measure (end of month 1)**
+- Time from report to first status change.
+- Share of reports that were duplicates (grouped instead of handled twice).
+- Share of reports routed to Cobb County.
+- Share of reports filed in Spanish, and "any update?" emails received by council offices.
+
+**Phase 3: citywide (months 2 to 3)**
+- Link OneDoor from mableton.gov, open it to all six districts, and share the Looker Studio dashboard with council members.
+- Add the official council district map so districts are set from the address automatically (`DISTRICTS_GEOJSON_FILE_ID`).
+
+**Before handling real resident data**
+- Move Gemini to a paid tier or Vertex AI so resident text is not used to improve Google's models. At a few thousand reports a month this costs a few dollars.
+- Run it under a Google Workspace account (higher email limits: 1,500 per day versus 100 on a personal account) and set a retention rule for the Requests tab.
+- Confirm the Cobb County referral links with the county.
+
+**Cost.** $0 for the pilot: Apps Script, Sheets, Forms, Looker Studio, the Census geocoder and the Gemini free tier. The FY2027 budget sets aside $250,000 for community development, building and code enforcement software. OneDoor can run now at no cost and give the city real data on demand before it buys a larger system. Because the data is a plain Google Sheet, it can be exported to whatever comes next.
+
+**Later.** SMS intake, a direct handoff to Cobb County's SeeClickFix, and more languages.
+
+## Accessibility
+
+- Every field has a visible label. Required fields are marked, and errors are listed at the top and next to each field, then announced to screen readers.
+- Keyboard: skip link, visible two-tone focus ring, focus moves to each section's heading, and no keyboard traps.
+- Color contrast meets WCAG AA in light and dark mode, and status is shown as text, not color alone.
+- The whole site and every message switch between English and Spanish, and the page language updates for screen readers.
+- Voice: **Speak** records in the page and Gemini writes down what was said. If the browser blocks the microphone inside Apps Script's frame, a small recording window opens instead. The audio is never stored; only the text goes into the report.
+- Checked with axe-core (WCAG 2.2 AA rules) on every tab.
+
+## Sources
+
+- City of Mableton, State of the City: https://mableton.gov/state-of-city
+- FOX 5 Atlanta, staff growth and reliance on Cobb County: https://fox5atlanta.com/news/mableton-qualifed-city-status
+- Cobb County Courier, Patricia Auch questionnaire (Oct 2025): https://cobbcountycourier.com/2025/10/responses-to-the-couriers-mableton-candidate-questionnaires-patricia-auch/
+- Dumped trash in Mableton (about 800 lb a day): https://www.yahoo.com/news/articles/tires-furniture-tractor-trailers-mountains-015257936.html
+- City of Mableton Code Enforcement: https://www.mableton.gov/1201/Code-Enforcement-Department and https://www.mableton.gov/1418/Common-Code-Enforcement-Issues
+- Data USA, Mableton (2024 ACS): https://datausa.io/profile/geo/mableton-ga
+- FY2027 budget presentation: https://www.mableton.gov/DocumentCenter/View/911
+- FY2027 budget adoption: https://www.mableton.gov/DocumentCenter/View/914
+- Marietta Daily Journal, June 16, 2026 (dumping fines): https://www.mdjonline.com/news/local/mableton-delays-57-7m-budget-vote-after-residents-call-for-more-review/article_0087ff54-2aa0-42c8-8f9f-64b6a991b0c8.html
