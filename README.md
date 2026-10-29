@@ -5,7 +5,7 @@
 Georgia 311 Challenge 2026 · DevDogs (GDG on Campus UGA) · Track 3: Tiny Desk, Civic Style
 Team: Bhaumi Nadella, Sophie Keller · Advisor: Jack Harrington
 
-**Live prototype:** [PASTE_EXEC_URL_HERE](https://script.google.com/macros/s/AKfycbwLzPYVHCepaXQkW9-spYOR90AHZQHQrn6nht-PsabZSziIC71Ub2VAo7whDON6aNic/exec
+**Live prototype:** [Live prototype url](https://script.google.com/macros/s/AKfycbwLzPYVHCepaXQkW9-spYOR90AHZQHQrn6nht-PsabZSziIC71Ub2VAo7whDON6aNic/exec
 ) 
 **Demo video:** PASTE_VIDEO_LINK_HERE
 
