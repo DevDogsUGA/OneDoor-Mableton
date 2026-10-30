@@ -7,7 +7,6 @@ Team: Bhaumi Nadella, Sophie Keller · Advisor: Jack Harrington
 
 **Live prototype:** [Live prototype url](https://script.google.com/macros/s/AKfycbwLzPYVHCepaXQkW9-spYOR90AHZQHQrn6nht-PsabZSziIC71Ub2VAo7whDON6aNic/exec
 ) 
-**Demo video:** PASTE_VIDEO_LINK_HERE
 
 OneDoor is one front door for Mableton residents to report neighborhood problems (illegal dumping, tall grass, junk cars, missed trash pickup) in English or Spanish. Gemini sorts each report, tells the resident whether the City or Cobb County handles it, and groups duplicate reports into one issue so a small staff sees a ranked list instead of a full inbox. Residents get a tracking number and can follow their request from Received to Fixed. A public page shows open issues by district and how department budgets compare with the cost of work.
 
